@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+service Sample {
+    rpc SayHello (HelloRequest) returns (HelloReply) {}
+}
+
+message HelloRequest {
+    string name = 1;
+}
+
+message HelloReply {
+    string message = 1;
+}
+
+service LearningAgent {
+    rpc TrainBatch (TrainBatchRequest) returns (TrainResponse) {}
+    rpc ClassifyImageProb (ClassifyRequest) returns (ClassifyProbResponse) {}
+    rpc ClassifyImageSoftmax (ClassifyRequest) returns (ClassifyConcreteResponse) {}
+}
+
+// format: http://yann.lecun.com/exdb/mnist/ (actual data, no headers)
+message TrainBatchRequest {
+    uint32 count = 1;
+    bytes labels = 2;
+    bytes pixels = 3;
+}
+
+message TrainResponse {}
+
+message ClassifyRequest {
+    bytes pixels = 1;
+}
+
+message ClassifyProbResponse {
+    repeated float results = 1; // array containing probabilities for each digit
+}
+
+message ClassifyConcreteResponse {
+    uint32 result = 1; // most probable digit
+}
+
+service CentralAgent {
+    rpc StartTraining (StartTrainingRequest) returns (Trained) {}
+    rpc ClassifyImage (ClassifyRequest) returns (ClassifyConcreteResponse) {}
+}
+
+message StartTrainingRequest {}
+message Trained {}
