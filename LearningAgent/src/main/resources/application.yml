@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: grpc-server
+
+network:
+  batchSize: 128 # batch size for each epoch
+  randomSeed: 123 # random number seed for reproducibility
+  numEpochs: 5 # number of epochs to perform
+
+logging:
+  level:
+    root: WARN
+    pl.edu.agh.agenty.learning: INFO
+    org.springframework: INFO
+    org.lognet: INFO
+    org.deeplearning4j: INFO

@@ -1,0 +1,8 @@
+FROM kurtzz/ubuntu-agenty
+
+ADD LearningAgent/src /root/src
+ADD LearningAgent/pom.xml /root
+ADD agents.proto /root/src/main/proto
+ENV port 6565
+
+ENTRYPOINT ["mvn", "spring-boot:run", "-Dgrpc.port=${port}"]
