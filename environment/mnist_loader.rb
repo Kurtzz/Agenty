@@ -37,6 +37,7 @@ class MnistLoader
 
   private
     def load_data
+      return if @data
       n_rows = n_cols = nil
       images = []
       labels = []
