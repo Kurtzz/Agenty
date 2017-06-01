@@ -4,7 +4,8 @@ option java_multiple_files = true;
 option java_package = "pl.edu.agh.agenty.learning.grpc";
 
 service Sample {
-    rpc SayHello (HelloRequest) returns (HelloReply) {}
+    rpc SayHello (HelloRequest) returns (HelloReply) {
+    }
 }
 
 message HelloRequest {
@@ -16,9 +17,14 @@ message HelloReply {
 }
 
 service LearningAgent {
-    rpc TrainBatch (TrainBatchRequest) returns (TrainResponse) {}
-    rpc ClassifyImageProb (ClassifyRequest) returns (ClassifyProbResponse) {}
-    rpc ClassifyImageSoftmax (ClassifyRequest) returns (ClassifyConcreteResponse) {}
+    rpc TrainBatch (TrainBatchRequest) returns (TrainResponse) {
+    }
+    rpc ClassifyImageProb (ClassifyRequest) returns (ClassifyProbResponse) {
+    }
+    rpc ClassifyImageSoftmax (ClassifyRequest) returns (ClassifyConcreteResponse) {
+    }
+    rpc Reset (ResetRequest) returns (ResetResponse) {
+    }
 }
 
 // format: http://yann.lecun.com/exdb/mnist/ (actual data, no headers)
@@ -28,7 +34,8 @@ message TrainBatchRequest {
     bytes pixels = 3;
 }
 
-message TrainResponse {}
+message TrainResponse {
+}
 
 message ClassifyRequest {
     bytes pixels = 1;
@@ -42,13 +49,22 @@ message ClassifyConcreteResponse {
     uint32 result = 1; // most probable digit
 }
 
+message ResetRequest {
+}
+
+message ResetResponse {
+}
+
 service CentralAgent {
-    rpc StartTraining (StartTrainingRequest) returns (Trained) {}
-    rpc ClassifyImage (ClassifyRequest) returns (ClassifyConcreteResponse) {}
+    rpc StartTraining (StartTrainingRequest) returns (Trained) {
+    }
+    rpc ClassifyImage (ClassifyRequest) returns (ClassifyConcreteResponse) {
+    }
 }
 
 message StartTrainingRequest {
     repeated string agentAddresses = 1; // each address = host:port
     string trainingStartegyId = 2;
 }
-message Trained {}
+message Trained {
+}
