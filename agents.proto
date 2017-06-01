@@ -47,5 +47,8 @@ service CentralAgent {
     rpc ClassifyImage (ClassifyRequest) returns (ClassifyConcreteResponse) {}
 }
 
-message StartTrainingRequest {}
+message StartTrainingRequest {
+    repeated string agentAddresses = 1; // each address = host:port
+    string trainingStartegyId = 2;
+}
 message Trained {}
