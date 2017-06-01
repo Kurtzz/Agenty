@@ -5,7 +5,7 @@ class Agent
     @service_port = service_port
   end
 
-  def service
-    @stub ||= LearningAgent::Stub.new("localhost:#{service_port}", :this_channel_is_insecure)
+  def endpoint
+    "localhost:#{service_port}"
   end
 end

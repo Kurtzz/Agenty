@@ -1,11 +1,9 @@
 require 'docker'
-require_relative 'agent.rb'
-require 'pry'
 
 class Keeper
-  IMAGE_NAME='learning_agent'.freeze
   attr_reader :agents
-  def initialize(image_name, nodes_count, start_port = 7000)
+  def initialize(agent_klass, image_name, nodes_count, start_port = 7000)
+    @agent_klass = agent_klass
     @image_name = image_name
     @nodes_count = nodes_count
     @start_port = start_port
@@ -15,7 +13,7 @@ class Keeper
     @agents ||= @nodes_count.times.map do |i|
       service_port = @start_port + i + 1
       container = Docker::Container.create(
-        'name' => "learning_agent_#{i+1}",
+        'name' => "#{@image_name}_#{i+1}",
         'Image' => @image_name,
         'ExposedPorts' => { '6565/tcp' => {} },
         'HostConfig' => {
@@ -28,7 +26,7 @@ class Keeper
         }
       )
       container.start
-      Agent.new(container, service_port)
+      @agent_klass.new(container, service_port)
     end
   end
 
