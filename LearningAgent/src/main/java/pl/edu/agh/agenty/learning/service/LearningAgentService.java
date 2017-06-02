@@ -7,10 +7,13 @@ import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import pl.edu.agh.agenty.learning.exception.WrongNumberOfPixelsException;
 import pl.edu.agh.agenty.learning.grpc.ClassifyConcreteResponse;
 import pl.edu.agh.agenty.learning.grpc.ClassifyProbResponse;
 import pl.edu.agh.agenty.learning.grpc.ClassifyRequest;
 import pl.edu.agh.agenty.learning.grpc.LearningAgentGrpc;
+import pl.edu.agh.agenty.learning.grpc.ResetRequest;
+import pl.edu.agh.agenty.learning.grpc.ResetResponse;
 import pl.edu.agh.agenty.learning.grpc.TrainBatchRequest;
 import pl.edu.agh.agenty.learning.grpc.TrainResponse;
 import pl.edu.agh.agenty.learning.neural.NeuralNetworkManager;
@@ -46,6 +49,12 @@ public class LearningAgentService extends LearningAgentGrpc.LearningAgentImplBas
     public void classifyImageProb(ClassifyRequest request, StreamObserver<ClassifyProbResponse> responseObserver) {
         INDArray input = LearningAgentUtils.createINDArray(request.getPixels());
         INDArray result = networkManager.classifyDigit(input);
+
+        if (result == null) {
+            responseObserver.onError(new WrongNumberOfPixelsException());
+            return;
+        }
+
         List<Float> probabilities = new ArrayList<>();
 
         IntStream.range(0, result.length()).forEach(i -> probabilities.add(result.getFloat(i)));
@@ -68,6 +77,14 @@ public class LearningAgentService extends LearningAgentGrpc.LearningAgentImplBas
 
         ClassifyConcreteResponse response = ClassifyConcreteResponse.newBuilder().setResult(result).build();
         responseObserver.onNext(response);
+        responseObserver.onCompleted();
+    }
+
+    @Override
+    public void reset(ResetRequest request, StreamObserver<ResetResponse> responseObserver) {
+        networkManager.resetNetwork();
+
+        responseObserver.onNext(ResetResponse.getDefaultInstance());
         responseObserver.onCompleted();
     }
 

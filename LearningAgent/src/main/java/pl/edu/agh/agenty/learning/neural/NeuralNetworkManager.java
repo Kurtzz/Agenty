@@ -87,4 +87,8 @@ public class NeuralNetworkManager {
         log.info("Digit classification: " + result);
         return result;
     }
+
+    public void resetNetwork() {
+        network.clear();
+    }
 }
