@@ -46,7 +46,8 @@ message ClassifyProbResponse {
 }
 
 message ClassifyConcreteResponse {
-    uint32 result = 1; // most probable digit
+    uint32 resultProb = 1; // most probable digit from probabilites
+    uint32 resultSoftmax = 2; // most probable digit from softmax
 }
 
 message ResetRequest {
