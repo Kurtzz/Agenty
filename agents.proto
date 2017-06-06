@@ -65,7 +65,11 @@ service CentralAgent {
 
 message StartTrainingRequest {
     repeated string agentAddresses = 1; // each address = host:port
-    string trainingStartegyId = 2;
+    repeated DigitAssociation associations = 2;
 }
 message Trained {
+}
+
+message DigitAssociation {
+    repeated uint32 digits = 1;
 }
