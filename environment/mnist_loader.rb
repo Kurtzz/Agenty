@@ -58,7 +58,7 @@ class MnistLoader
 
       # collate image and label data
       @data = images.map.with_index do |image, i|
-        { image: image, label: labels[i] }
+        { image: image, targetInt: labels[i] }
       end
     end
 

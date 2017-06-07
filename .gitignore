@@ -2,4 +2,3 @@
 .idea
 *.iml
 *_pb.rb
-/mnist_data

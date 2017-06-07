@@ -46,8 +46,7 @@ message ClassifyProbResponse {
 }
 
 message ClassifyConcreteResponse {
-    uint32 resultProb = 1; // most probable digit from probabilites
-    uint32 resultSoftmax = 2; // most probable digit from softmax
+    uint32 result = 1;
 }
 
 message ResetRequest {
@@ -61,6 +60,12 @@ service CentralAgent {
     }
     rpc ClassifyImage (ClassifyRequest) returns (ClassifyConcreteResponse) {
     }
+}
+
+
+message ClassifyResponse {
+    uint32 resultProb = 1; // most probable digit from probabilites
+    uint32 resultSoftmax = 2; // most probable digit from softmax
 }
 
 message StartTrainingRequest {
