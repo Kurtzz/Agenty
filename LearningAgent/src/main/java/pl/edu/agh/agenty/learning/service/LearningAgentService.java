@@ -3,7 +3,7 @@ package pl.edu.agh.agenty.learning.service;
 import io.grpc.stub.StreamObserver;
 import org.lognet.springboot.grpc.GRpcService;
 import org.nd4j.linalg.api.ndarray.INDArray;
-import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
+import org.nd4j.linalg.dataset.DataSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,10 +37,18 @@ public class LearningAgentService extends LearningAgentGrpc.LearningAgentImplBas
         this.networkManager = networkManager;
     }
 
+//    @Override
+//    public void trainBatch(TrainBatchRequest request, StreamObserver<TrainResponse> responseObserver) {
+//        DataSetIterator iterator = LearningAgentUtils.createDataSetIterator(request.getCount(), request.getPixels(), request.getLabels());
+//        networkManager.trainNetwork(iterator);
+//        responseObserver.onNext(TrainResponse.getDefaultInstance());
+//        responseObserver.onCompleted();
+//    }
+
     @Override
     public void trainBatch(TrainBatchRequest request, StreamObserver<TrainResponse> responseObserver) {
-        DataSetIterator iterator = LearningAgentUtils.createDataSetIterator(request.getCount(), request.getPixels(), request.getLabels());
-        networkManager.trainNetwork(iterator);
+        DataSet dataSet = LearningAgentUtils.createDataSet(request.getCount(), request.getPixels(), request.getLabels());
+        networkManager.trainNetwork(dataSet);
         responseObserver.onNext(TrainResponse.getDefaultInstance());
         responseObserver.onCompleted();
     }

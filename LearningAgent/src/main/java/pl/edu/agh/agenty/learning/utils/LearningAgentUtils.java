@@ -4,6 +4,7 @@ import com.google.protobuf.ByteString;
 import org.deeplearning4j.berkeley.Pair;
 import org.deeplearning4j.datasets.iterator.INDArrayDataSetIterator;
 import org.nd4j.linalg.api.ndarray.INDArray;
+import org.nd4j.linalg.dataset.DataSet;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.factory.Nd4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,16 +29,35 @@ public class LearningAgentUtils {
 
     public static DataSetIterator createDataSetIterator(int count, ByteString pixels, ByteString labels) {
         List<Pair<INDArray, INDArray>> pairs = new LinkedList<>();
+        byte[] image;
+        byte label;
+        Pair<INDArray, INDArray> pair;
 
         for (int i = 0; i < count; i++) {
-            byte[] image = pixels.substring(i*(NUM_PIXELS), (i+1)*NUM_PIXELS).toByteArray();
-            byte label = labels.byteAt(i);
+            image = pixels.substring(i*(NUM_PIXELS), (i+1)*NUM_PIXELS).toByteArray();
+            label = labels.byteAt(i);
 
-            Pair<INDArray, INDArray> pair = new Pair<>(createINDArray(image), createINDArrayLabel(label));
+            pair = new Pair<>(createINDArray(image), createINDArrayLabel(label));
             pairs.add(pair);
         }
 
         return new INDArrayDataSetIterator(pairs, properties.getBatchSize());
+    }
+
+    public static DataSet createDataSet(int count, ByteString pixels, ByteString labels) {
+        byte[] image;
+        byte label;
+        INDArray first = Nd4j.create(count, NUM_PIXELS);
+        INDArray second = Nd4j.create(count, 10);
+
+        for (int i = 0; i < count; i++) {
+            image = pixels.substring(i*(NUM_PIXELS), (i+1)*NUM_PIXELS).toByteArray();
+            label = labels.byteAt(i);
+            first.putRow(i, createINDArray(image));
+            second.putRow(i, createINDArrayLabel(label));
+        }
+
+        return new DataSet(first, second);
     }
 
     public static INDArray createINDArray(ByteString pixels) {

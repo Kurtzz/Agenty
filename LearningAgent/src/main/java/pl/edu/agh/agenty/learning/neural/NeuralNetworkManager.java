@@ -11,6 +11,7 @@ import org.deeplearning4j.nn.weights.WeightInit;
 import org.deeplearning4j.optimize.listeners.ScoreIterationListener;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
+import org.nd4j.linalg.dataset.api.DataSet;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 import org.slf4j.Logger;
@@ -74,6 +75,13 @@ public class NeuralNetworkManager {
         for (int i = 0; i < properties.getNumEpochs(); i++) {
             log.info("Training network (epoch: {}) ...", i + 1);
             network.fit(iterator);
+        }
+    }
+
+    public void trainNetwork(DataSet data) {
+        for (int i = 0; i < properties.getNumEpochs(); i++) {
+            log.info("Training network (epoch: {}) ...", i + 1);
+            network.fit(data);
         }
     }
 
