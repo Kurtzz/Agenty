@@ -129,6 +129,10 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <finalName>Learning</finalName>
+                    <executable>true</executable>
+                </configuration>
             </plugin>
 
             <!-- compiler -->
@@ -141,6 +145,15 @@
                     <target>${java.version}</target>
                 </configuration>
             </plugin>
+
+            <!--<plugin>-->
+                <!--<groupId>org.apache.maven.plugins</groupId>-->
+                <!--<artifactId>maven-jar-plugin</artifactId>-->
+                <!--<version>2.3.2</version>-->
+                <!--<configuration>-->
+                    <!--<finalName>Learning</finalName>-->
+                <!--</configuration>-->
+            <!--</plugin>-->
 
             <!-- copy .proto file to resources-->
             <!-- <plugin>

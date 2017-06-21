@@ -4,6 +4,15 @@ Run command `mvn spring-boot:run`. Add `-Dgrpc.port=<port_number>` to specify po
 
 (Uncomment maven-resources-plugin in `pom.xml`)
 
+## Running 2
+Run command `mvn package`.
+Navigate to the target directory and run:
+```$xslt
+java -jar -Dgrpc.port=<port> Learning.jar
+```
+
+(Uncomment maven-resources-plugin in `pom.xml`)
+
 ## Docker
 Run `docker build -f LearningDockerfile -t <image_name> .` 
 
