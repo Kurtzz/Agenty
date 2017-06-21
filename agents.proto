@@ -58,10 +58,9 @@ message ResetResponse {
 service CentralAgent {
     rpc StartTraining (StartTrainingRequest) returns (Trained) {
     }
-    rpc ClassifyImage (ClassifyRequest) returns (ClassifyConcreteResponse) {
+    rpc ClassifyImage (ClassifyRequest) returns (ClassifyResponse) {
     }
 }
-
 
 message ClassifyResponse {
     uint32 resultProb = 1; // most probable digit from probabilites

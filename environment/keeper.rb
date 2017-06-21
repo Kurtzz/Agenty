@@ -16,6 +16,9 @@ class Keeper
         'name' => "#{@image_name}_#{i+1}",
         'Image' => @image_name,
         'ExposedPorts' => { '6565/tcp' => {} },
+        'Env' => [
+          "MAVEN_OPTS=-Xms256m -Xmx600m"
+        ],
         'HostConfig' => {
           'PortBindings' => {
             '6565/tcp' => [{ 'HostPort' => service_port.to_s }]
