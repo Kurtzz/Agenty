@@ -45,42 +45,42 @@ class NeuralNetworkManager {
   }
 
   def resetNetwork(): Unit = {
-    network clear()
+    network = buildNetwork
+//    network clear()
   }
 }
 
 object NeuralNetworkManager {
   private val log = LoggerFactory.getLogger(classOf[NeuralNetworkManager])
   @Autowired private var properties: NetworkProperties = _
+  private val configuration = new NeuralNetConfiguration.Builder()
+    .seed(properties.randomSeed)
+    .optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)
+    .iterations(1)
+    .learningRate(0.006)
+    .updater(Updater.NESTEROVS).momentum(0.9)
+    .regularization(true).l2(1e-4)
+    .list.layer(0, new DenseLayer.Builder()
+    .nIn(Consts.NUM_PIXELS)
+    .nOut(1000)
+    .activation(Activation.RELU)
+    .weightInit(WeightInit.XAVIER)
+    .build)
+    .layer(1, new OutputLayer.Builder(LossFunctions.LossFunction.NEGATIVELOGLIKELIHOOD)
+      .nIn(1000)
+      .nOut(Consts.OUTPUT_NUM)
+      .activation(Activation.SOFTMAX)
+      .weightInit(WeightInit.XAVIER)
+      .build)
+    .pretrain(false)
+    .backprop(true)
+    .build
 
   private def buildNetwork: MultiLayerNetwork = {
     log.info("Building multilayer network...")
-    val configuration = new NeuralNetConfiguration.Builder()
-      .seed(properties.randomSeed)
-      .optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)
-      .iterations(1)
-      .learningRate(0.006)
-      .updater(Updater.NESTEROVS).momentum(0.9)
-      .regularization(true).l2(1e-4)
-      .list.layer(0, new DenseLayer.Builder()
-        .nIn(Consts.NUM_PIXELS)
-        .nOut(1000)
-        .activation(Activation.RELU)
-        .weightInit(WeightInit.XAVIER)
-        .build)
-      .layer(1, new OutputLayer.Builder(LossFunctions.LossFunction.NEGATIVELOGLIKELIHOOD)
-        .nIn(1000)
-        .nOut(Consts.OUTPUT_NUM)
-        .activation(Activation.SOFTMAX)
-        .weightInit(WeightInit.XAVIER)
-        .build)
-      .pretrain(false)
-      .backprop(true)
-      .build //use backpropagation to adjust weights
-
     val model = new MultiLayerNetwork(configuration)
-    model setListeners new ScoreIterationListener(10)
-    model init()
+    model.setListeners(new ScoreIterationListener(10))
+    model.init()
     model
   }
 }
