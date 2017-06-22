@@ -9,16 +9,19 @@ import org.springframework.stereotype.Component
 @Component
 @ConfigurationProperties("network")
 class NetworkProperties {
-  var _batchSize = 0
-  var _randomSeed = 0
-  var _numEpochs = 0
+  var batchSize: Int = _
+  var randomSeed: Int = _
+  var numEpochs: Int = _
 
-  def batchSize: Int = _batchSize
-  def batchSize_(value: Int): Unit = _batchSize = value
+  def setBatchSize(value: Int): Unit = {
+    batchSize = value
+  }
 
-  def randomSeed: Int = _randomSeed
-  def randomSeed_(value: Int): Unit = _randomSeed = value
+  def setRandomSeed(value: Int): Unit = {
+    randomSeed = value
+  }
 
-  def numEpochs: Int = _numEpochs
-  def numEpochs_(value: Int): Unit = _numEpochs = value
+  def setNumEpochs(value: Int): Unit = {
+    numEpochs = value
+  }
 }

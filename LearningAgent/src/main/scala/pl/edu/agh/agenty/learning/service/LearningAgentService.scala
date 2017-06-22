@@ -21,16 +21,17 @@ class LearningAgentService extends LearningAgentGrpc.LearningAgentImplBase {
   private val log : Logger = LoggerFactory.getLogger(this.getClass)
 
   @Autowired var networkManager : NeuralNetworkManager = _
+  @Autowired var learningAgentUtils : LearningAgentUtils = _
 
   override def trainBatch(request: TrainBatchRequest, responseObserver: StreamObserver[TrainResponse]): Unit = {
-    val iterator = LearningAgentUtils.createDataSetIterator(request.getCount, request.getPixels, request.getLabels)
+    val iterator = learningAgentUtils.createDataSetIterator(request.getCount, request.getPixels, request.getLabels)
     networkManager.trainNetwork(iterator)
     responseObserver.onNext(TrainResponse.getDefaultInstance)
     responseObserver.onCompleted()
   }
 
   override def classifyImageProb(request: ClassifyRequest, responseObserver: StreamObserver[ClassifyProbResponse]): Unit = {
-    val input = LearningAgentUtils.createINDArray(request.getPixels)
+    val input = learningAgentUtils.createINDArray(request.getPixels)
     val result = networkManager.classifyDigit(input)
 
     if (result == null) {
@@ -50,7 +51,7 @@ class LearningAgentService extends LearningAgentGrpc.LearningAgentImplBase {
 
 
   override def classifyImageSoftmax(request: ClassifyRequest , responseObserver: StreamObserver[ClassifyConcreteResponse]): Unit = {
-    val input = LearningAgentUtils.createINDArray(request.getPixels)
+    val input = learningAgentUtils.createINDArray(request.getPixels)
     val output = networkManager.classifyDigit(input)
 
     val result: Int = getDigitWithHighestProbability(output)

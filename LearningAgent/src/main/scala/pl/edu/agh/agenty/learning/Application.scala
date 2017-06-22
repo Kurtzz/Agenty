@@ -2,6 +2,7 @@ package pl.edu.agh.agenty.learning
 
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.{EnableAutoConfiguration, SpringBootApplication}
+import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.ComponentScan
 
 /**
@@ -9,6 +10,7 @@ import org.springframework.context.annotation.ComponentScan
   */
 @SpringBootApplication
 @EnableAutoConfiguration
+@EnableConfigurationProperties
 @ComponentScan(Array("pl.edu.agh.agenty.learning"))
 class Config
 

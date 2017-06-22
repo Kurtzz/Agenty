@@ -18,12 +18,14 @@ import pl.edu.agh.agenty.learning.utils.{Consts, NetworkProperties}
 @Service
 class NeuralNetworkManager {
   import NeuralNetworkManager._
-
   private var network: MultiLayerNetwork = _
 
-  def this(properties: NetworkProperties) {
+  @Autowired
+  def this(prop: NetworkProperties) {
     this()
-    this.network = buildNetwork
+    properties = prop
+    configuration = buildConfiguration
+    network = buildNetwork
   }
 
   def trainNetwork(iterator: DataSetIterator): Unit = {
@@ -46,14 +48,13 @@ class NeuralNetworkManager {
 
   def resetNetwork(): Unit = {
     network = buildNetwork
-//    network clear()
   }
 }
 
 object NeuralNetworkManager {
   private val log = LoggerFactory.getLogger(classOf[NeuralNetworkManager])
-  @Autowired private var properties: NetworkProperties = _
-  private val configuration = buildConfiguration
+  private var properties: NetworkProperties = _
+  private var configuration: MultiLayerConfiguration = _
 
   private def buildNetwork: MultiLayerNetwork = {
     log.info("Building multilayer network...")
