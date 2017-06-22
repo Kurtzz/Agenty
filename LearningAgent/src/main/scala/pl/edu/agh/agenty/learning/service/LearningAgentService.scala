@@ -10,7 +10,7 @@ import pl.edu.agh.agenty.learning.grpc._
 import pl.edu.agh.agenty.learning.neural.NeuralNetworkManager
 import pl.edu.agh.agenty.learning.utils.LearningAgentUtils
 
-import scala.collection.JavaConversions
+import scala.collection.JavaConverters
 import scala.collection.mutable.ListBuffer
 
 /**
@@ -43,7 +43,7 @@ class LearningAgentService extends LearningAgentGrpc.LearningAgentImplBase {
     (0 to result.length()).foreach(i => probabilities += result.getFloat(i))
 
     val response = ClassifyProbResponse.newBuilder()
-      .addAllResults(JavaConversions.asJavaIterable(probabilities)).build()
+      .addAllResults(JavaConverters.asJavaIterable(probabilities)).build()
     responseObserver.onNext(response)
     responseObserver.onCompleted()
   }

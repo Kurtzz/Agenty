@@ -9,7 +9,7 @@ import org.nd4j.linalg.factory.Nd4j
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
-import scala.collection.JavaConversions
+import scala.collection.JavaConverters
 import scala.collection.mutable.ListBuffer
 
 /**
@@ -30,7 +30,7 @@ object LearningAgentUtils {
       val pair = new Pair[INDArray, INDArray](createINDArray(image), createINDArrayLabel(label))
       pairs += pair
     }
-    new INDArrayDataSetIterator(JavaConversions.asJavaCollection(pairs), properties.batchSize)
+    new INDArrayDataSetIterator(JavaConverters.asJavaCollection(pairs), properties.batchSize)
   }
 
   def createINDArray(pixels: ByteString): INDArray = createINDArray(pixels.toByteArray)
