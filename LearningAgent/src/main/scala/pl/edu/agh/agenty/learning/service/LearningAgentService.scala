@@ -74,7 +74,7 @@ class LearningAgentService extends LearningAgentGrpc.LearningAgentImplBase {
   private def getDigitWithHighestProbability(output: INDArray): Int = {
     var maxIndex = -1
     var maxProbability = 0f
-    (0 to output.length).foreach(i => {
+    (0 until output.length).foreach(i => {
       if (output.getFloat(i) > maxProbability) {
         maxIndex = i
         maxProbability = output.getFloat(i)

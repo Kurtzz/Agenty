@@ -24,7 +24,7 @@ object LearningAgentUtils {
 
   def createDataSetIterator(count: Int, pixels: ByteString, labels: ByteString): DataSetIterator = {
     var pairs = new ListBuffer[Pair[INDArray, INDArray]]()
-    for(i <- 0 to count) {
+    for(i <- 0 until count) {
       val image = pixels.substring(i * Consts.NUM_PIXELS, (i + 1) * Consts.NUM_PIXELS).toByteArray
       val label = labels.byteAt(i)
       val pair = new Pair[INDArray, INDArray](createINDArray(image), createINDArrayLabel(label))
@@ -37,7 +37,7 @@ object LearningAgentUtils {
 
   def createINDArray(pixels: Array[Byte]): INDArray = {
     var indArray = Nd4j.create(Consts.NUM_PIXELS)
-    for(i <- 0 to Consts.NUM_PIXELS) {
+    for(i <- 0 until Consts.NUM_PIXELS) {
       indArray = indArray.put(0, i, pixels(i))
     }
     indArray

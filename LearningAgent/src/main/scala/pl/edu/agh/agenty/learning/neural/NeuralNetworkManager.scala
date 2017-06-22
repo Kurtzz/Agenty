@@ -27,7 +27,7 @@ class NeuralNetworkManager {
   }
 
   def trainNetwork(iterator: DataSetIterator): Unit = {
-    for (i <- 0 to properties.numEpochs) {
+    for (i <- 0 until properties.numEpochs) {
       log.info("Training network (epoch: {}) ...", i + 1)
       network.fit(iterator)
     }
