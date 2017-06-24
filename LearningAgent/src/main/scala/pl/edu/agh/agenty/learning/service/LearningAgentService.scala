@@ -41,7 +41,7 @@ class LearningAgentService extends LearningAgentGrpc.LearningAgentImplBase {
 
     val probabilities = new ListBuffer[java.lang.Float]
 
-    (0 to result.length()).foreach(i => probabilities += result.getFloat(i))
+    (0 until result.length()).foreach(i => probabilities += result.getFloat(i))
 
     val response = ClassifyProbResponse.newBuilder()
       .addAllResults(JavaConverters.asJavaIterable(probabilities)).build()
