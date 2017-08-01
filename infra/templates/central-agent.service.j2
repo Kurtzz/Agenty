@@ -1,0 +1,9 @@
+[Unit]
+Description=Central Agent
+[Service]
+ExecStart=/usr/bin/ruby /home/ubuntu/central/central_agent_impl.rb
+WorkingDirectory=/home/ubuntu/central/
+Type=simple
+User=ubuntu
+[Install]
+WantedBy=multi-user.target

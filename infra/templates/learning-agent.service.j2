@@ -1,0 +1,8 @@
+[Unit]
+Description=Learning Agent
+[Service]
+ExecStart=/usr/bin/java -jar /home/ubuntu/Learning.jar
+Type=simple
+User=ubuntu
+[Install]
+WantedBy=multi-user.target

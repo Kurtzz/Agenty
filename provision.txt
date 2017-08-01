@@ -1,0 +1,3 @@
+sudo add-apt-repository ppa:webupd8team/java
+apt update
+apt install docker.io oracle-java8-installer ruby-bundler ruby-dev ruby build-essential htop

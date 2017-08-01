@@ -1,0 +1,80 @@
+---
+- hosts: learning-agent
+  remote_user: ubuntu
+  become: yes
+  tasks:
+  - apt_repository:
+      repo: 'ppa:webupd8team/java'
+      update_cache: yes
+  - debconf:
+      name: oracle-java8-installer
+      question: shared/accepted-oracle-license-v1-1
+      value: "true"
+      vtype: select
+  - apt:
+      state: present
+      name: "{{ item }}"
+    with_items:
+      - oracle-java8-installer
+      - htop
+  # - synchronize:
+  #     src: ../LearningAgent/target/Learning.jar
+  #     dest: /home/ubuntu/Learning.jar
+  #     partial: true
+  #   become: no
+  - stat: path=/home/ubuntu/Learning.jar
+    register: deployed_jar
+  - command: wget https://www.dropbox.com/s/enodkbqo3kmmjit/Learning.jar?dl=0 -O /home/ubuntu/Learning.jar
+    become: no
+    when: deployed_jar.stat.exists == False
+  - template: src=learning-agent.service.j2 dest=/etc/systemd/system/learning-agent.service
+  - systemd: state=restarted name=learning-agent daemon_reload=yes
+- hosts: central-agent
+  remote_user: ubuntu
+  tasks:
+  - apt:
+      state: present
+      name: "{{ item }}"
+    with_items:
+      - ruby-bundler 
+      - ruby-dev 
+      - ruby
+      - build-essential
+      - htop
+    become: yes
+  - synchronize:
+      src: ../central
+      dest: /home/ubuntu/
+      partial: true
+  - bundler:
+      state: present
+      chdir: /home/ubuntu/central
+  - template: src=central-agent.service.j2 dest=/etc/systemd/system/central-agent.service
+    become: yes
+  - systemd: state=restarted name=central-agent daemon_reload=yes
+    become: yes
+- hosts: environment-agent
+  remote_user: ubuntu
+  tasks:
+  - apt:
+      state: present
+      name: "{{ item }}"
+    with_items:
+      - ruby-bundler 
+      - ruby-dev 
+      - ruby
+      - build-essential
+      - htop
+      - gnuplot
+    become: yes
+  - synchronize:
+      src: ../environment
+      dest: /home/ubuntu/
+      partial: true
+  - bundler:
+      state: present
+      chdir: /home/ubuntu/environment
+    # - template: src=environment-agent.service.j2 dest=/etc/systemd/system/environment-agent.service
+    #   become: yes
+    # - systemd: state=started name=environment-agent daemon_reload=yes
+    #   become: yes

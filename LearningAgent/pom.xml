@@ -156,7 +156,7 @@
             <!--</plugin>-->
 
             <!-- copy .proto file to resources-->
-            <!-- <plugin>
+             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>3.0.2</version>
                 <executions>
@@ -180,7 +180,7 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin> -->
+            </plugin>
 
             <!-- compile protobuf files with protoc and grpc plugin -->
             <plugin>

@@ -2,6 +2,10 @@ LearningSet = Struct.new(:description, :set) do
   def inspect
     description
   end
+
+  def slug
+    description.downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')
+  end
 end
 
 class LearningSets
@@ -16,8 +20,8 @@ class LearningSets
 
   def self.get
     [
-      LearningSet.new('Reference', [(0..9).to_a]),
-      LearningSet.new('6 groups each 5 numbers randomly', [[9, 2, 4, 1, 6], [6, 7, 3, 8, 4], [0, 9, 5, 3, 8], [1, 9, 0, 7, 3], [4, 0, 5, 1, 2], [7, 8, 2, 5, 6]]),
+      # LearningSet.new('Reference', [(0..9).to_a]),
+      # LearningSet.new('6 groups each 5 numbers randomly', [[9, 2, 4, 1, 6], [6, 7, 3, 8, 4], [0, 9, 5, 3, 8], [1, 9, 0, 7, 3], [4, 0, 5, 1, 2], [7, 8, 2, 5, 6]]),
       LearningSet.new('6 groups each 5 numbers 01234 56789', [[0, 1, 2, 3, 4], [5, 6, 7, 8, 9], [0, 1, 2, 3, 4], [5, 6, 7, 8, 9], [0, 1, 2, 3, 4], [5, 6, 7, 8, 9]])
       # simple(1, 2),
       # simple(2, 1),

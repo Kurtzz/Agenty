@@ -46,7 +46,8 @@ class MnistLoader
         raise 'This is not MNIST image file' if magic != 2051
         n_rows, n_cols = f.read(8).unpack('N2')
         n_images.times do
-          images << f.read(n_rows * n_cols)
+          images << f.read(n_rows * n_cols).bytes.map {|c| c > 30 ? 255 : 0}.pack('C*')
+          # binding.pry
         end
       end
 

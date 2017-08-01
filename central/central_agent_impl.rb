@@ -7,6 +7,7 @@ require 'pry'
 
 class Singleton
   attr_accessor :agent_addresses
+  attr_accessor :associations
 
   def agent_address=(new_value)
     super(new_value)
@@ -25,9 +26,9 @@ $singleton = Singleton.new
 class CentralAgentImpl < CentralAgent::Service
   def start_training(start_training_request, _call)
     $singleton.agent_addresses = start_training_request.agentAddresses
-    associations = start_training_request.associations
-    promises = $singleton.stubs.each_with_index.first(associations.count).map do |stub, index|
-      trainer = Trainer.new(stub, MnistLoader.training_set.get_data_and_labels(associations[index].digits))
+    $singleton.associations = start_training_request.associations
+    promises = $singleton.stubs.each_with_index.first($singleton.associations.count).map do |stub, index|
+      trainer = Trainer.new(stub, MnistLoader.training_set.get_data_and_labels($singleton.associations[index].digits))
       Concurrent::Promise.execute { trainer.train }
     end
     promises.each(&:wait)
@@ -35,19 +36,27 @@ class CentralAgentImpl < CentralAgent::Service
   end
 
   def classify_image(classify_request, _call)
-    promises = $singleton.stubs.map do |stub|
+    promises = $singleton.stubs.first($singleton.associations.count).map do |stub|
       Concurrent::Promise.execute { [stub.classify_image_prob(classify_request), stub.classify_image_softmax(classify_request)] }
     end
     responses = promises.map(&:value)
     sumProb = Array.new(10, 0)
     sumSoftmax = Array.new(10, 0)
     responses.each do |response|
-      sumProb = [sumProb, response[0].results].transpose.map {|x| x.reduce(:+)}
-      sumSoftmax[response[1].result] += 1
+      begin
+        sumProb = [sumProb, response[0].results].transpose.map {|x| x.reduce(:+)}
+        sumSoftmax[response[1].result] += 1
+      rescue
+        puts "problem with response #{response}"
+      end
     end
     resultProb = sumProb.each_with_index.max[1]
     resultSoftmax = sumSoftmax.each_with_index.max[1]
     ClassifyResponse.new(resultProb: resultProb, resultSoftmax: resultSoftmax)
+  rescue Exception => e
+    # binding.pry
+    # raise e
+    p e
   end
 end
 

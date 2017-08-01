@@ -1,11 +1,11 @@
 class Agent
-  attr_reader :container, :service_port
-  def initialize(container, service_port)
-    @container = container
+  attr_reader :ip, :service_port
+  def initialize(ip, service_port)
+    @ip = ip
     @service_port = service_port
   end
 
   def endpoint
-    "localhost:#{service_port}"
+    "#{ip}:#{service_port}"
   end
 end

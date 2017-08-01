@@ -1,1 +1,9 @@
-../environment/Gemfile
+source 'https://rubygems.org'
+
+gem 'docker-api'
+gem 'grpc'
+gem 'grpc-tools'
+gem 'concurrent-ruby', require: 'concurrent'
+
+# dev
+gem 'pry'
